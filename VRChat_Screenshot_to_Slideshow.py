@@ -13,8 +13,10 @@ import subprocess
 import pprint
 
 credit = """
-【 複数のpngファイルをH264にするツール】
+【 VRChat Screenshot to Slideshow 】
     Version 0.0.0
+    VRChatのスクリーンショットからスライドショーを生成するツール
+
             製作 : 風庭ゆい
             Special thanks! : ぐー
 """
@@ -134,7 +136,7 @@ def mp4_generation(sorted_list):
     export_file = export_filename(size) 
     save = cv2.VideoWriter(export_file, fourcc, flame_rate, size)
 
-    print("出力サイズ: ", size)
+    print("出力サイズ :", size)
     print("出力形式 :", "H264")
     print("書き出しファイル名 :", export_file)
     print("ファイルはカレントディレクトリに生成されます")
