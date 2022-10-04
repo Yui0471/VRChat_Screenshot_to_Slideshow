@@ -125,6 +125,13 @@ def export_filename(size):
     dt_now = datetime.datetime.now()
     return "Export_" + dt_now.strftime("%Y-%m-%d_%H-%M-%S.%f") + ".mp4"
 
+# exeコンパイル後のリソースの場所を特定
+def resource_path(relative_path):
+    if hasattr(sys, "_MEIPASS"):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
+
+
 # mp4書き出し
 def mp4_generation(sorted_list):
     print("本スクリプトはOpenH264を使用してファイルを生成します :", "\n")
@@ -163,7 +170,8 @@ def mp4_generation(sorted_list):
 if __name__ == "__main__":
     print(credit)
 
-    if not os.path.isfile(".\\openh264-1.8.0-win64.dll"):
+    #if not os.path.isfile(".\\openh264-1.8.0-win64.dll"):
+    if not os.path.isfile(resource_path("openh264-1.8.0-win64.dll")):
         print(RED, "[Error!] OpenH264ファイルが見つかりません!", END)
         print("このスクリプトを使用するにはOpenH264 ver1.8.0が必要です")
         subprocess.call("PAUSE", shell=True)
