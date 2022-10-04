@@ -166,6 +166,8 @@ if __name__ == "__main__":
     if not os.path.isfile(".\\openh264-1.8.0-win64.dll"):
         print(RED, "[Error!] OpenH264ファイルが見つかりません!", END)
         print("このスクリプトを使用するにはOpenH264 ver1.8.0が必要です")
+        subprocess.call("PAUSE", shell=True)
+        sys.exit()
 
     # 通常動作モード(ドラッグアンドドロップで起動)
     if not len(sys.argv) <= 1:
@@ -180,17 +182,20 @@ if __name__ == "__main__":
 
             file_list = png_path_get(file_path)
 
-            if len(file_list) <= 4720:
+            if len(file_list) >= 4720:
                 print(RED, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
                 yes_or_no = input("処理を続行しますか? Y/N >>")
-                if yes_or_no ==  "y" and yes_or_no == "Y":
-
+                if "y" == yes_or_no or "Y" == yes_or_no:
                     mp4_generation(birthtime_sorted(birthtime_get(file_list)))
-
                     print("処理を正常に終了しました")
                 
                 else:
-                    pass
+                    print("処理を中断しました")
+                    subprocess.call("PAUSE", shell=True)
+                    sys.exit()
+
+            mp4_generation(birthtime_sorted(birthtime_get(file_list)))
+            print("処理を正常に終了しました")
         
         else:
             print(RED, "[Error!] フォルダ以外が選択されました！ 処理が続行できません", END)
@@ -208,26 +213,33 @@ if __name__ == "__main__":
             print("通常動作モードが選択されました")
             file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >>")
 
+            print("フォルダパスを取得しました: ", file_path)
+
+            # ディレクトリかどうか判定
             if os.path.isdir(file_path):
                 print("処理を開始します")
 
                 file_list = png_path_get(file_path)
 
-                if len(file_list) <= 4720:
+                if len(file_list) >= 4720:
                     print(RED, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
                     yes_or_no = input("処理を続行しますか? Y/N >>")
-                    if yes_or_no ==  "y" and yes_or_no == "Y":
-
+                    if "y" == yes_or_no or "Y" == yes_or_no:
                         mp4_generation(birthtime_sorted(birthtime_get(file_list)))
+                        print("処理を正常に終了しました")
+                    
+                    else:
+                        print("処理を中断しました")
+                        subprocess.call("PAUSE", shell=True)
+                        sys.exit()
 
-                    print("処理を正常に終了しました")
-                
-                else:
-                    pass
+                mp4_generation(birthtime_sorted(birthtime_get(file_list)))
+                print("処理を正常に終了しました")
             
             else:
                 print(RED, "[Error!] フォルダ以外が選択されました！ 処理が続行できません", END)
                 print("ドラッグアンドドロップで使用可能なのは[フォルダ]のみです")
+
 
         elif mode == "2":
             print("写真選択モードが選択されました")
