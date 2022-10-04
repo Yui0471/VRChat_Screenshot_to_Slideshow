@@ -4,7 +4,6 @@ import cv2
 import glob
 import os
 import sys
-import time
 from PIL import Image
 import tqdm
 import datetime
