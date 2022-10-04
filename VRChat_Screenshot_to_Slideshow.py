@@ -20,6 +20,7 @@ credit = """
             Special thanks! : ぐー
 """
 
+
 # CUI上で色を使用する
 ENABLE_PROCESSED_OUTPUT = 0x0001
 ENABLE_WRAP_AT_EOL_OUTPUT = 0x0002
@@ -33,6 +34,7 @@ kernel32.SetConsoleMode(handle, MODE)
 RED = "\033[31m"
 END = "\033[0m"
 
+
 # ディレクトリのパスを渡すと中にあるpngのパスをリスト化して返す
 def png_path_get(file_path):
     file_list = []
@@ -43,6 +45,7 @@ def png_path_get(file_path):
     print("画像データを", len(file_list), "件取得しました")
 
     return file_list
+
 
 # 作成日時を取得しパスと一緒に辞書型に格納する
 def birthtime_get(file_list):
@@ -60,6 +63,7 @@ def birthtime_get(file_list):
     
     return path_birth
 
+
 # 作成日時を基に並び替え
 def birthtime_sorted(path_birth):
     sorted_list = sorted(path_birth.items())
@@ -67,6 +71,7 @@ def birthtime_sorted(path_birth):
     print("更新日時でソートが完了しました")
 
     return sorted_list
+
 
 # https://daeudaeu.com/pil-aspect/
 # 画像のサイズと指定されたサイズを基にアスペクト比を変更しないサイズを出力
@@ -89,6 +94,7 @@ def keepAspectResize(path, size):
 
     #return resized_image
     return resize_size
+
 
 # https://qiita.com/iroha71/items/691367b77b52dae8cbaf
 # 画像サイズを1920,1080に合わせるために余白を黒塗りする
@@ -113,6 +119,7 @@ def expand(img, size):
     
     return padding_img
 
+
 # アスペクト比の計算
 def aspect_ratio(ox, oy):
     x, y = ox, oy
@@ -120,10 +127,12 @@ def aspect_ratio(ox, oy):
         x, y = y, x % y
     return (ox/x, oy/x)
 
+
 # ファイル名の生成
 def export_filename(size):
     dt_now = datetime.datetime.now()
     return "Export_" + dt_now.strftime("%Y-%m-%d_%H-%M-%S.%f") + ".mp4"
+
 
 # exeコンパイル後のリソースの場所を特定
 def resource_path(relative_path):
@@ -168,61 +177,22 @@ def mp4_generation(sorted_list):
     print("データの書き出しを完了しました")
 
 if __name__ == "__main__":
-    print(credit)
+    try:
 
-    #if not os.path.isfile(".\\openh264-1.8.0-win64.dll"):
-    if not os.path.isfile(resource_path("openh264-1.8.0-win64.dll")):
-        print(RED, "[Error!] OpenH264ファイルが見つかりません!", END)
-        print("このスクリプトを使用するにはOpenH264 ver1.8.0が必要です")
-        subprocess.call("PAUSE", shell=True)
-        sys.exit()
+        print(credit)
 
-    # 通常動作モード(ドラッグアンドドロップで起動)
-    if not len(sys.argv) <= 1:
-        print("通常動作モードが選択されました")
+        #if not os.path.isfile(".\\openh264-1.8.0-win64.dll"):
+        if not os.path.isfile(resource_path("openh264-1.8.0-win64.dll")):
+            print(RED, "[Error!] OpenH264ファイルが見つかりません!", END)
+            print("このスクリプトを使用するにはOpenH264 ver1.8.0が必要です")
+            subprocess.call("PAUSE", shell=True)
+            sys.exit()
 
-        file_path = sys.argv[1]
-        print("フォルダパスを取得しました: ", file_path)
-
-        # ディレクトリかどうか判定
-        if os.path.isdir(file_path):
-            print("処理を開始します")
-
-            file_list = png_path_get(file_path)
-
-            if len(file_list) >= 4720:
-                print(RED, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
-                yes_or_no = input("処理を続行しますか? Y/N >>")
-                if "y" == yes_or_no or "Y" == yes_or_no:
-                    mp4_generation(birthtime_sorted(birthtime_get(file_list)))
-                    print("処理を正常に終了しました")
-                
-                else:
-                    print("処理を中断しました")
-                    subprocess.call("PAUSE", shell=True)
-                    sys.exit()
-
-            mp4_generation(birthtime_sorted(birthtime_get(file_list)))
-            print("処理を正常に終了しました")
-        
-        else:
-            print(RED, "[Error!] フォルダ以外が選択されました！ 処理が続行できません", END)
-            print("ドラッグアンドドロップで使用可能なのは[フォルダ]のみです")
-
-    # 特殊操作モード(ダブルクリックで起動)
-    else:
-        print("特殊操作モードが選択されました")
-
-        print("\n1 : 通常動作モード\n2 : デバッグモード\n")
-
-        #print("\n1 : 通常動作モード\n2 : 写真選択モード\n3 : フレームレート指定モード\n4 : デバッグモード\n")
-
-        mode = input("起動したいモードの数字を入力してください : ")
-
-        if mode == "1":
+        # 通常動作モード(ドラッグアンドドロップで起動)
+        if not len(sys.argv) <= 1:
             print("通常動作モードが選択されました")
-            file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >>")
 
+            file_path = sys.argv[1]
             print("フォルダパスを取得しました: ", file_path)
 
             # ディレクトリかどうか判定
@@ -250,64 +220,113 @@ if __name__ == "__main__":
                 print(RED, "[Error!] フォルダ以外が選択されました！ 処理が続行できません", END)
                 print("ドラッグアンドドロップで使用可能なのは[フォルダ]のみです")
 
-
-        #elif mode == "2":
-        #    print("写真選択モードが選択されました")
-
-        #elif mode == "3":
-        #    print("フレームレート指定モードが選択されました")
-
-        elif mode == "2":
-            print("デバッグモードが選択されました")
-            print("[Warning!] このモードは大量のログが生成されます")
-            file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >>")
-
-            print("フォルダパスを取得しました: ", file_path)
-
-            # ディレクトリかどうか判定
-            if os.path.isdir(file_path):
-                print("処理を開始します")
-
-                file_list = png_path_get(file_path)
-
-                if len(file_list) >= 4720:
-                    print(RED, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
-                    yes_or_no = input("処理を続行しますか? Y/N >>")
-                    if "y" == yes_or_no or "Y" == yes_or_no:
-
-                        file_list = png_path_get(file_path)
-                        pprint.pprint(file_list)
-                        path_birth = birthtime_get(file_list)
-                        pprint.pprint(path_birth)
-                        sorted_list = birthtime_sorted(path_birth)
-                        for tuple in sorted_list:
-                            print(tuple)
-                        mp4_generation(sorted_list)
-
-                        print("処理を正常に終了しました")
-                    
-                    else:
-                        print("処理を中断しました")
-                        subprocess.call("PAUSE", shell=True)
-                        sys.exit()
-
-                file_list = png_path_get(file_path)
-                pprint.pprint(file_list)
-                path_birth = birthtime_get(file_list)
-                pprint.pprint(path_birth)
-                sorted_list = birthtime_sorted(path_birth)
-                for tuple in sorted_list:
-                    print(tuple)
-                mp4_generation(sorted_list)
-                print("処理を正常に終了しました")
-            
-            else:
-                print(RED, "[Error!] フォルダ以外が選択されました！ 処理が続行できません", END)
-                print("ドラッグアンドドロップで使用可能なのは[フォルダ]のみです")
-
+        # 特殊操作モード(ダブルクリックで起動)
         else:
-            print(RED, "[Error!] 数字以外が入力されました! 処理を続行できません", END)
+            print("特殊操作モードが選択されました")
 
-    subprocess.call("PAUSE", shell=True)
+            print("\n1 : 通常動作モード\n2 : デバッグモード\n")
 
-    
+            #print("\n1 : 通常動作モード\n2 : 写真選択モード\n3 : フレームレート指定モード\n4 : デバッグモード\n")
+
+            mode = input("起動したいモードの数字を入力してください : ")
+
+            if mode == "1":
+                print("通常動作モードが選択されました")
+                file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >>")
+
+                print("フォルダパスを取得しました: ", file_path)
+
+                # ディレクトリかどうか判定
+                if os.path.isdir(file_path):
+                    print("処理を開始します")
+
+                    file_list = png_path_get(file_path)
+
+                    if len(file_list) >= 4720:
+                        print(RED, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
+                        yes_or_no = input("処理を続行しますか? Y/N >>")
+                        if "y" == yes_or_no or "Y" == yes_or_no:
+                            mp4_generation(birthtime_sorted(birthtime_get(file_list)))
+                            print("処理を正常に終了しました")
+                        
+                        else:
+                            print("処理を中断しました")
+                            subprocess.call("PAUSE", shell=True)
+                            sys.exit()
+
+                    mp4_generation(birthtime_sorted(birthtime_get(file_list)))
+                    print("処理を正常に終了しました")
+                
+                else:
+                    print(RED, "[Error!] フォルダ以外が選択されました！ 処理が続行できません", END)
+                    print("ドラッグアンドドロップで使用可能なのは[フォルダ]のみです")
+
+
+            #elif mode == "2":
+            #    print("写真選択モードが選択されました")
+
+            #elif mode == "3":
+            #    print("フレームレート指定モードが選択されました")
+
+            elif mode == "2":
+                print("デバッグモードが選択されました")
+                print("[Warning!] このモードは大量のログが生成されます")
+                file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >>")
+
+                print("フォルダパスを取得しました: ", file_path)
+
+                # ディレクトリかどうか判定
+                if os.path.isdir(file_path):
+                    print("処理を開始します")
+
+                    file_list = png_path_get(file_path)
+
+                    if len(file_list) >= 4720:
+                        print(RED, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
+                        yes_or_no = input("処理を続行しますか? Y/N >>")
+                        if "y" == yes_or_no or "Y" == yes_or_no:
+
+                            file_list = png_path_get(file_path)
+                            pprint.pprint(file_list)
+                            path_birth = birthtime_get(file_list)
+                            pprint.pprint(path_birth)
+                            sorted_list = birthtime_sorted(path_birth)
+                            for tuple in sorted_list:
+                                print(tuple)
+                            mp4_generation(sorted_list)
+
+                            print("処理を正常に終了しました")
+                        
+                        else:
+                            print("処理を中断しました")
+                            subprocess.call("PAUSE", shell=True)
+                            sys.exit()
+
+                    file_list = png_path_get(file_path)
+                    pprint.pprint(file_list)
+                    path_birth = birthtime_get(file_list)
+                    pprint.pprint(path_birth)
+                    sorted_list = birthtime_sorted(path_birth)
+                    for tuple in sorted_list:
+                        print(tuple)
+                    mp4_generation(sorted_list)
+
+                    print("処理を正常に終了しました")
+                
+                else:
+                    print(RED, "[Error!] フォルダ以外が選択されました！ 処理が続行できません", END)
+                    print("ドラッグアンドドロップで使用可能なのは[フォルダ]のみです")
+
+            else:
+                print(RED, "[Error!] 数字以外が入力されました! 処理を続行できません", END)
+
+        subprocess.call("PAUSE", shell=True)
+
+    except:
+        print(RED, "[Error!] エラーが発生しました!", END)
+        import traceback
+        traceback.print_exc()
+
+        subprocess.call("PAUSE", shell=True)
+
+        
