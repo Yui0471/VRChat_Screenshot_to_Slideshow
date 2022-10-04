@@ -13,7 +13,7 @@ import pprint
 
 credit = """
 【 VRChat Screenshot to Slideshow 】
-    Version 0.0.0
+    Version 0.0.1
     VRChatのスクリーンショットからスライドショーを生成するツール
 
             製作 : 風庭ゆい
