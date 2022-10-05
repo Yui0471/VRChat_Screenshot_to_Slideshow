@@ -268,8 +268,7 @@ if __name__ == "__main__":
                         print(RED, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
                         yes_or_no = input("処理を続行しますか? Y/N >>")
                         if "y" == yes_or_no or "Y" == yes_or_no:
-                            mp4_generation(birthtime_sorted(birthtime_get(file_list)))
-                            print("処理を正常に終了しました")
+                            pass
                         
                         else:
                             print("処理を中断しました")
@@ -351,18 +350,8 @@ if __name__ == "__main__":
                         print(RED, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
                         yes_or_no = input("処理を続行しますか? Y/N >>")
                         if "y" == yes_or_no or "Y" == yes_or_no:
+                            pass
 
-                            file_list = png_path_get(file_path)
-                            pprint.pprint(file_list)
-                            path_birth = birthtime_get(file_list)
-                            pprint.pprint(path_birth)
-                            sorted_list = birthtime_sorted(path_birth)
-                            for tuple in sorted_list:
-                                print(tuple)
-                            mp4_generation(sorted_list)
-
-                            print("処理を正常に終了しました")
-                        
                         else:
                             print("処理を中断しました")
                             subprocess.call("PAUSE", shell=True)
