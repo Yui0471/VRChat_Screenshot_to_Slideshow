@@ -226,11 +226,10 @@ if __name__ == "__main__":
 
                 if len(file_list) >= 4720:
                     print(RED, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
-                    yes_or_no = input("処理を続行しますか? Y/N >>")
+                    yes_or_no = input("処理を続行しますか? Y/N >> ")
+
                     if "y" == yes_or_no or "Y" == yes_or_no:
-                        mp4_generation(birthtime_sorted(birthtime_get(file_list)))
-                        print("処理を正常に終了しました")
-                    
+                        pass
                     else:
                         print("処理を中断しました")
                         subprocess.call("PAUSE", shell=True)
@@ -258,7 +257,7 @@ if __name__ == "__main__":
 
             if mode == "1":
                 print("通常動作モードが選択されました")
-                file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >>")
+                file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >> ")
 
                 print("フォルダパスを取得しました: ", file_path)
 
@@ -270,10 +269,10 @@ if __name__ == "__main__":
 
                     if len(file_list) >= 4720:
                         print(RED, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
-                        yes_or_no = input("処理を続行しますか? Y/N >>")
+                        yes_or_no = input("処理を続行しますか? Y/N >> ")
+
                         if "y" == yes_or_no or "Y" == yes_or_no:
                             pass
-                        
                         else:
                             print("処理を中断しました")
                             subprocess.call("PAUSE", shell=True)
@@ -294,8 +293,8 @@ if __name__ == "__main__":
             elif mode == "2":
                 print("フレームレート指定モードが選択されました")
                 print("このモードは画像一枚当たりの表示フレームを指定することができます")
-                file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >>")
-                fps = float(input("画像一枚当たりのフレームレートを入力してください >>"))
+                file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >> ")
+                fps = float(input("画像一枚当たりのフレームレートを入力してください >> "))
 
                 print("フォルダパスを取得しました: ", file_path)
 
@@ -307,10 +306,10 @@ if __name__ == "__main__":
 
                     if len(file_list) >= 4720:
                         print(RED, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
-                        yes_or_no = input("処理を続行しますか? Y/N >>")
+                        yes_or_no = input("処理を続行しますか? Y/N >> ")
+
                         if "y" == yes_or_no or "Y" == yes_or_no:
                             pass
-                        
                         else:
                             print("処理を中断しました")
                             subprocess.call("PAUSE", shell=True)
@@ -320,10 +319,10 @@ if __name__ == "__main__":
 
                     if len(sorted_list) / fps >= 139: # 総コマ数 / fps で動画の総秒数が算出できる
                         print(RED, "[Warning!] このフレームレートだと2分20秒を上回る可能性があります!", END)
-                        yes_or_no = input("処理を続行しますか? Y/N >>")
+                        yes_or_no = input("処理を続行しますか? Y/N >> ")
+                        
                         if "y" == yes_or_no or "Y" == yes_or_no:
                             pass
-
                         else:
                             print("処理を中断しました")
                             subprocess.call("PAUSE", shell=True)
@@ -340,8 +339,8 @@ if __name__ == "__main__":
             elif mode == "3":
                 print("写真表示秒数指定モードが選択されました")
                 print("このモードは画像一枚当たりの表示を指定することができます")
-                file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >>")
-                seconds = float(input("画像一枚当たりの秒数を入力してください >>"))
+                file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >> ")
+                seconds = float(input("画像一枚当たりの秒数を入力してください >> "))
                 fps = 1 / seconds # 1 / 秒数でfpsが算出できる
 
                 print("フォルダパスを取得しました: ", file_path)
@@ -354,10 +353,10 @@ if __name__ == "__main__":
 
                     if len(file_list) >= 4720:
                         print(RED, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
-                        yes_or_no = input("処理を続行しますか? Y/N >>")
+                        yes_or_no = input("処理を続行しますか? Y/N >> ")
+
                         if "y" == yes_or_no or "Y" == yes_or_no:
                             pass
-                        
                         else:
                             print("処理を中断しました")
                             subprocess.call("PAUSE", shell=True)
@@ -367,10 +366,10 @@ if __name__ == "__main__":
 
                     if len(sorted_list) / fps >= 139: # 総コマ数 / fps で動画の総秒数が算出できる
                         print(RED, "[Warning!] この秒数だと2分20秒を上回る可能性があります!", END)
-                        yes_or_no = input("処理を続行しますか? Y/N >>")
+                        yes_or_no = input("処理を続行しますか? Y/N >> ")
+
                         if "y" == yes_or_no or "Y" == yes_or_no:
                             pass
-
                         else:
                             print("処理を中断しました")
                             subprocess.call("PAUSE", shell=True)
@@ -387,7 +386,7 @@ if __name__ == "__main__":
             elif mode == "4":
                 print("デバッグモードが選択されました")
                 print("[Warning!] このモードは大量のログが生成されます")
-                file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >>")
+                file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >> ")
 
                 print("フォルダパスを取得しました: ", file_path)
 
@@ -399,10 +398,10 @@ if __name__ == "__main__":
 
                     if len(file_list) >= 4720:
                         print(RED, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
-                        yes_or_no = input("処理を続行しますか? Y/N >>")
+                        yes_or_no = input("処理を続行しますか? Y/N >> ")
+
                         if "y" == yes_or_no or "Y" == yes_or_no:
                             pass
-
                         else:
                             print("処理を中断しました")
                             subprocess.call("PAUSE", shell=True)
