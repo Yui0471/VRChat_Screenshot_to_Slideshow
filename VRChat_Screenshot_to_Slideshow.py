@@ -171,6 +171,7 @@ def mp4_generation(sorted_list, fps=None):
     save = cv2.VideoWriter(export_file, fourcc, flame_rate, size)
 
     print("画像一枚当たりのフレームレート :", flame_rate)
+    print("画像一枚当たりの秒数 :", 1 / flame_rate) # 1 / fpsでフレーム当たりの秒数が求められる(逆数)
     print("出力サイズ :", size[0], "x", size[1])
     print("出力形式 :", "H.264")
     print("書き出しファイル名 :", export_file)
@@ -246,9 +247,7 @@ if __name__ == "__main__":
         else:
             print("特殊操作モードが選択されました")
 
-            print("\n1 : 通常動作モード\n2 : フレームレート指定モード\n3 : デバッグモード\n")
-
-            #print("\n1 : 通常動作モード\n2 : 写真選択モード\n3 : フレームレート指定モード\n4 : デバッグモード\n")
+            print("\n1 : 通常動作モード\n2 : フレームレート指定モード\n3 : 写真表示秒数指定モード\n4 : デバッグモード\n")
 
             mode = input("起動したいモードの数字を入力してください : ")
 
@@ -334,6 +333,53 @@ if __name__ == "__main__":
 
 
             elif mode == "3":
+                print("写真表示秒数指定モードが選択されました")
+                print("このモードは画像一枚当たりの表示を指定することができます")
+                file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >>")
+                seconds = float(input("画像一枚当たりの秒数を入力してください >>"))
+                fps = 1 / seconds # 1 / 秒数でfpsが算出できる
+
+                print("フォルダパスを取得しました: ", file_path)
+
+                # ディレクトリかどうか判定
+                if os.path.isdir(file_path):
+                    print("処理を開始します")
+
+                    file_list = png_path_get(file_path)
+
+                    if len(file_list) >= 4720:
+                        print(RED, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
+                        yes_or_no = input("処理を続行しますか? Y/N >>")
+                        if "y" == yes_or_no or "Y" == yes_or_no:
+                            pass
+                        
+                        else:
+                            print("処理を中断しました")
+                            subprocess.call("PAUSE", shell=True)
+                            sys.exit()
+
+                    sorted_list = birthtime_sorted(birthtime_get(file_list))
+
+                    if len(sorted_list) / fps >= 139: # 総コマ数 / fps で動画の総秒数が算出できる
+                        print(RED, "[Warning!] この秒数だと2分20秒を上回る可能性があります!", END)
+                        yes_or_no = input("処理を続行しますか? Y/N >>")
+                        if "y" == yes_or_no or "Y" == yes_or_no:
+                            pass
+
+                        else:
+                            print("処理を中断しました")
+                            subprocess.call("PAUSE", shell=True)
+                            sys.exit()
+
+                    mp4_generation(sorted_list, fps)
+                    print("処理を正常に終了しました")
+                
+                else:
+                    print(RED, "[Error!] フォルダ以外が選択されました！ 処理が続行できません", END)
+                    print("ドラッグアンドドロップで使用可能なのは[フォルダ]のみです")
+
+
+            elif mode == "4":
                 print("デバッグモードが選択されました")
                 print("[Warning!] このモードは大量のログが生成されます")
                 file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >>")
