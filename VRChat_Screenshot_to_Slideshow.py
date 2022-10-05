@@ -14,7 +14,7 @@ import numpy as np
 
 credit = """
 【 VRChat Screenshot to Slideshow 】
-    Version 0.0.1
+    Version 0.0.2
     VRChatのスクリーンショットからスライドショーを生成するツール
 
             製作 : 風庭ゆい
