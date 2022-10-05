@@ -10,6 +10,7 @@ import datetime
 import ctypes
 import subprocess
 import pprint
+import numpy as np
 
 credit = """
 【 VRChat Screenshot to Slideshow 】
@@ -141,6 +142,19 @@ def resource_path(relative_path):
     return os.path.join(os.path.abspath("."), relative_path)
 
 
+# https://qiita.com/SKYS/items/cbde3775e2143cad7455
+# OpenCV, imreadは日本語パスを使用すると文字化けが発生し参照できなくなる
+# そのため対策としてnp.fromfileとcv2.imdecodeで分解して実行する
+def imread(filename, flags=cv2.IMREAD_COLOR, dtype=np.uint8):
+    try:
+        n = np.fromfile(filename, dtype)
+        img = cv2.imdecode(n, flags)
+        return img
+    except Exception as e:
+        print(e)
+        return None
+
+
 # mp4書き出し
 def mp4_generation(sorted_list):
     print("本スクリプトはOpenCV及びOpenH264を使用してファイルを生成します :", "\n")
@@ -151,7 +165,7 @@ def mp4_generation(sorted_list):
     export_file = export_filename(size) 
     save = cv2.VideoWriter(export_file, fourcc, flame_rate, size)
 
-    print("出力サイズ :", size)
+    print("出力サイズ :", size[0], "x", size[1])
     print("出力形式 :", "H264")
     print("書き出しファイル名 :", export_file)
     print("ファイルはカレントディレクトリに生成されます")
@@ -159,7 +173,9 @@ def mp4_generation(sorted_list):
 
     for path in tqdm.tqdm(sorted_list):
         img_path = path[1]
-        img = cv2.imread(img_path)
+        #img = cv2.imread(img_path) # 日本語パスだと文字化けが発生する
+
+        img = imread(img_path) # 対策
         
         height, width, color = img.shape
         # 16:9の画像ではない場合(縦画像など)
