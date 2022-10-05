@@ -21,7 +21,6 @@ credit = """
             Special thanks! : ぐー
 """
 
-
 # CUI上で色を使用する
 ENABLE_PROCESSED_OUTPUT = 0x0001
 ENABLE_WRAP_AT_EOL_OUTPUT = 0x0002
@@ -156,17 +155,24 @@ def imread(filename, flags=cv2.IMREAD_COLOR, dtype=np.uint8):
 
 
 # mp4書き出し
-def mp4_generation(sorted_list):
+def mp4_generation(sorted_list, fps=None):
     print("本スクリプトはOpenCV及びOpenH264を使用してファイルを生成します :", "\n")
 
     size = (1920, 1080) # サイズ指定
-    fourcc = cv2.VideoWriter_fourcc("H", "2", "6", "4") # フォーマット指定(H264)
-    flame_rate = len(sorted_list) / 139 # フレームレート計算, 総枚数と140秒(2分20秒)で割る
+    fourcc = cv2.VideoWriter_fourcc("H", "2", "6", "4") # フォーマット指定(H.264)
+
+    if fps: # フレームレート指定モード
+        flame_rate = fps
+
+    else:
+        flame_rate = len(sorted_list) / 139 # フレームレート計算, 総枚数と140秒(2分20秒)で割る
+
     export_file = export_filename(size) 
     save = cv2.VideoWriter(export_file, fourcc, flame_rate, size)
 
+    print("画像一枚当たりのフレームレート :", flame_rate)
     print("出力サイズ :", size[0], "x", size[1])
-    print("出力形式 :", "H264")
+    print("出力形式 :", "H.264")
     print("書き出しファイル名 :", export_file)
     print("ファイルはカレントディレクトリに生成されます")
     print("データの書き出しを開始します...")
@@ -240,7 +246,7 @@ if __name__ == "__main__":
         else:
             print("特殊操作モードが選択されました")
 
-            print("\n1 : 通常動作モード\n2 : デバッグモード\n")
+            print("\n1 : 通常動作モード\n2 : フレームレート指定モード\n3 : デバッグモード\n")
 
             #print("\n1 : 通常動作モード\n2 : 写真選択モード\n3 : フレームレート指定モード\n4 : デバッグモード\n")
 
@@ -281,10 +287,54 @@ if __name__ == "__main__":
             #elif mode == "2":
             #    print("写真選択モードが選択されました")
 
-            #elif mode == "3":
-            #    print("フレームレート指定モードが選択されました")
 
             elif mode == "2":
+                print("フレームレート指定モードが選択されました")
+                print("このモードは画像一枚当たりの表示フレームを指定することができます")
+                file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >>")
+                fps = float(input("画像一枚当たりのフレームレートを入力してください >>"))
+
+                print("フォルダパスを取得しました: ", file_path)
+
+                # ディレクトリかどうか判定
+                if os.path.isdir(file_path):
+                    print("処理を開始します")
+
+                    file_list = png_path_get(file_path)
+
+                    if len(file_list) >= 4720:
+                        print(RED, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
+                        yes_or_no = input("処理を続行しますか? Y/N >>")
+                        if "y" == yes_or_no or "Y" == yes_or_no:
+                            pass
+                        
+                        else:
+                            print("処理を中断しました")
+                            subprocess.call("PAUSE", shell=True)
+                            sys.exit()
+
+                    sorted_list = birthtime_sorted(birthtime_get(file_list))
+
+                    if len(sorted_list) / fps >= 139: # 総コマ数 / fps で動画の総秒数が算出できる
+                        print(RED, "[Warning!] このフレームレートだと2分20秒を上回る可能性があります!", END)
+                        yes_or_no = input("処理を続行しますか? Y/N >>")
+                        if "y" == yes_or_no or "Y" == yes_or_no:
+                            pass
+
+                        else:
+                            print("処理を中断しました")
+                            subprocess.call("PAUSE", shell=True)
+                            sys.exit()
+
+                    mp4_generation(sorted_list, fps)
+                    print("処理を正常に終了しました")
+                
+                else:
+                    print(RED, "[Error!] フォルダ以外が選択されました！ 処理が続行できません", END)
+                    print("ドラッグアンドドロップで使用可能なのは[フォルダ]のみです")
+
+
+            elif mode == "3":
                 print("デバッグモードが選択されました")
                 print("[Warning!] このモードは大量のログが生成されます")
                 file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >>")
@@ -338,10 +388,12 @@ if __name__ == "__main__":
 
         subprocess.call("PAUSE", shell=True)
 
-    except:
+
+    except Exception as e:
         print(RED, "[Error!] エラーが発生しました!", END)
         import traceback
         traceback.print_exc()
+        print(e)
 
         subprocess.call("PAUSE", shell=True)
 
