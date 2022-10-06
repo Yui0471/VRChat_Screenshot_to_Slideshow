@@ -152,6 +152,19 @@ def imread(filename, flags=cv2.IMREAD_COLOR, dtype=np.uint8):
         return None
 
 
+# 警告メッセージ
+def warning(message):
+    print(YELLOW, message, END)
+    yes_or_no = input("処理を続行しますか? Y/N >> ")
+
+    if "y" == yes_or_no or "Y" == yes_or_no:
+        return
+    else:
+        print("処理を中断しました")
+        subprocess.call("PAUSE", shell=True)
+        sys.exit()
+
+
 # mp4書き出し
 def mp4_generation(sorted_list, fps=None):
     print("本スクリプトはOpenCV及びOpenH264を使用してファイルを生成します :", "\n")
@@ -223,28 +236,12 @@ if __name__ == "__main__":
                 file_list = png_path_get(file_path)
 
                 if len(file_list) >= 4720:
-                    print(YELLOW, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
-                    yes_or_no = input("処理を続行しますか? Y/N >> ")
-
-                    if "y" == yes_or_no or "Y" == yes_or_no:
-                        pass
-                    else:
-                        print("処理を中断しました")
-                        subprocess.call("PAUSE", shell=True)
-                        sys.exit()
+                    warning("[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります")
 
                 sorted_list = birthtime_sorted(birthtime_get(file_list))
 
                 if (len(sorted_list) / 139) >= 60:
-                    print(YELLOW, "[Warning!] この画像総枚数だと60fpsを超過します!", END)
-                    yes_or_no = input("処理を続行しますか? Y/N >> ")
-
-                    if "y" == yes_or_no or "Y" == yes_or_no:
-                        pass
-                    else:
-                        print("処理を中断しました")
-                        subprocess.call("PAUSE", shell=True)
-                        sys.exit()
+                    warning("[Warning!] この画像総枚数だと60fpsを超過します!")
 
                 mp4_generation(sorted_list)
                 print("処理を正常に終了しました")
@@ -280,28 +277,12 @@ if __name__ == "__main__":
                     file_list = png_path_get(file_path)
 
                     if len(file_list) >= 4720:
-                        print(YELLOW, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
-                        yes_or_no = input("処理を続行しますか? Y/N >> ")
-
-                        if "y" == yes_or_no or "Y" == yes_or_no:
-                            pass
-                        else:
-                            print("処理を中断しました")
-                            subprocess.call("PAUSE", shell=True)
-                            sys.exit()
+                        warning("[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります")
 
                     sorted_list = birthtime_sorted(birthtime_get(file_list))
 
                     if (len(sorted_list) / 139) >= 60:
-                        print(YELLOW, "[Warning!] この画像総枚数だと60fpsを超過します!", END)
-                        yes_or_no = input("処理を続行しますか? Y/N >> ")
-
-                        if "y" == yes_or_no or "Y" == yes_or_no:
-                            pass
-                        else:
-                            print("処理を中断しました")
-                            subprocess.call("PAUSE", shell=True)
-                            sys.exit()
+                        warning("[Warning!] この画像総枚数だと60fpsを超過します!")
 
                     mp4_generation(sorted_list)
                     print("処理を正常に終了しました")
@@ -330,39 +311,15 @@ if __name__ == "__main__":
                     file_list = png_path_get(file_path)
 
                     if len(file_list) >= 4720:
-                        print(YELLOW, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
-                        yes_or_no = input("処理を続行しますか? Y/N >> ")
-
-                        if "y" == yes_or_no or "Y" == yes_or_no:
-                            pass
-                        else:
-                            print("処理を中断しました")
-                            subprocess.call("PAUSE", shell=True)
-                            sys.exit()
+                        warning("[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります")
 
                     sorted_list = birthtime_sorted(birthtime_get(file_list))
 
                     if len(sorted_list) / fps >= 139: # 総コマ数 / fps で動画の総秒数が算出できる
-                        print(YELLOW, "[Warning!] このフレームレートだと2分20秒を上回る可能性があります!", END)
-                        yes_or_no = input("処理を続行しますか? Y/N >> ")
-                        
-                        if "y" == yes_or_no or "Y" == yes_or_no:
-                            pass
-                        else:
-                            print("処理を中断しました")
-                            subprocess.call("PAUSE", shell=True)
-                            sys.exit()
+                        warning("[Warning!] このフレームレートだと2分20秒を上回る可能性があります!")
 
                     if fps >= 60:
-                        print(YELLOW, "[Warning!] 指定されたフレームレートは60fpsを超過しています!", END)
-                        yes_or_no = input("処理を続行しますか? Y/N >> ")
-
-                        if "y" == yes_or_no or "Y" == yes_or_no:
-                            pass
-                        else:
-                            print("処理を中断しました")
-                            subprocess.call("PAUSE", shell=True)
-                            sys.exit()
+                        warning("[Warning!] 指定されたフレームレートは60fpsを超過しています!")
 
                     mp4_generation(sorted_list, fps)
                     print("処理を正常に終了しました")
@@ -388,39 +345,15 @@ if __name__ == "__main__":
                     file_list = png_path_get(file_path)
 
                     if len(file_list) >= 4720:
-                        print(YELLOW, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
-                        yes_or_no = input("処理を続行しますか? Y/N >> ")
-
-                        if "y" == yes_or_no or "Y" == yes_or_no:
-                            pass
-                        else:
-                            print("処理を中断しました")
-                            subprocess.call("PAUSE", shell=True)
-                            sys.exit()
+                        warning("[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります")
 
                     sorted_list = birthtime_sorted(birthtime_get(file_list))
 
                     if fps >= 60:
-                        print(YELLOW, "[Warning!] 指定された秒数だと60fpsを超過します!", END)
-                        yes_or_no = input("処理を続行しますか? Y/N >> ")
-
-                        if "y" == yes_or_no or "Y" == yes_or_no:
-                            pass
-                        else:
-                            print("処理を中断しました")
-                            subprocess.call("PAUSE", shell=True)
-                            sys.exit()
+                        warning("[Warning!] 指定された秒数だと60fpsを超過します!")
 
                     if len(sorted_list) / fps >= 139: # 総コマ数 / fps で動画の総秒数が算出できる
-                        print(YELLOW, "[Warning!] この秒数だと2分20秒を上回る可能性があります!", END)
-                        yes_or_no = input("処理を続行しますか? Y/N >> ")
-
-                        if "y" == yes_or_no or "Y" == yes_or_no:
-                            pass
-                        else:
-                            print("処理を中断しました")
-                            subprocess.call("PAUSE", shell=True)
-                            sys.exit()
+                        warning("[Warning!] この秒数だと2分20秒を上回る可能性があります!")
 
                     mp4_generation(sorted_list, fps)
                     print("処理を正常に終了しました")
@@ -447,39 +380,15 @@ if __name__ == "__main__":
                     fps = len(file_list) / mov_len # 総枚数 / 動画の長さ で一秒あたりの表示レート(fps)の算出ができる
 
                     if len(file_list) >= 4720:
-                        print(YELLOW, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
-                        yes_or_no = input("処理を続行しますか? Y/N >> ")
-
-                        if "y" == yes_or_no or "Y" == yes_or_no:
-                            pass
-                        else:
-                            print("処理を中断しました")
-                            subprocess.call("PAUSE", shell=True)
-                            sys.exit()
+                        warning("[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります")
 
                     sorted_list = birthtime_sorted(birthtime_get(file_list))
 
                     if fps >= 60:
-                        print(YELLOW, "[Warning!] 指定された秒数だと60fpsを超過します!", END)
-                        yes_or_no = input("処理を続行しますか? Y/N >> ")
-
-                        if "y" == yes_or_no or "Y" == yes_or_no:
-                            pass
-                        else:
-                            print("処理を中断しました")
-                            subprocess.call("PAUSE", shell=True)
-                            sys.exit()
+                        warning("[Warning!] 指定された秒数だと60fpsを超過します!")
 
                     if len(sorted_list) / fps >= 139: # 総コマ数 / fps で動画の総秒数が算出できる
-                        print(YELLOW, "[Warning!] 指定された秒数は2分20秒を上回ります!", END)
-                        yes_or_no = input("処理を続行しますか? Y/N >> ")
-
-                        if "y" == yes_or_no or "Y" == yes_or_no:
-                            pass
-                        else:
-                            print("処理を中断しました")
-                            subprocess.call("PAUSE", shell=True)
-                            sys.exit()
+                        warning("[Warning!] 指定された秒数は2分20秒を上回ります!")
 
                     mp4_generation(sorted_list, fps)
                     print("処理を正常に終了しました")
@@ -491,7 +400,7 @@ if __name__ == "__main__":
 
             elif mode == "5":
                 print("デバッグモードが選択されました")
-                print(YELLOW, "[Warning!] このモードは大量のログが生成されます", END)
+                print("[Warning!] このモードは大量のログが生成されます")
                 file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >> ")
 
                 print("フォルダパスを取得しました: ", file_path)
@@ -503,15 +412,7 @@ if __name__ == "__main__":
                     file_list = png_path_get(file_path)
 
                     if len(file_list) >= 4720:
-                        print(YELLOW, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
-                        yes_or_no = input("処理を続行しますか? Y/N >> ")
-
-                        if "y" == yes_or_no or "Y" == yes_or_no:
-                            pass
-                        else:
-                            print("処理を中断しました")
-                            subprocess.call("PAUSE", shell=True)
-                            sys.exit()
+                        warning("[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります")
 
                     file_list = png_path_get(file_path)
                     pprint.pprint(file_list)
@@ -520,15 +421,7 @@ if __name__ == "__main__":
                     sorted_list = birthtime_sorted(path_birth)
 
                     if (len(sorted_list) / 139) >= 60:
-                        print(YELLOW, "[Warning!] この画像総枚数だと60fpsを超過します!", END)
-                        yes_or_no = input("処理を続行しますか? Y/N >> ")
-
-                        if "y" == yes_or_no or "Y" == yes_or_no:
-                            pass
-                        else:
-                            print("処理を中断しました")
-                            subprocess.call("PAUSE", shell=True)
-                            sys.exit()
+                        warning("[Warning!] この画像総枚数だと60fpsを超過します!")
 
                     for tuple in sorted_list:
                         print(tuple)
