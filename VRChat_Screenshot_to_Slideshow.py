@@ -77,14 +77,11 @@ def birthtime_sorted(path_birth):
 # https://daeudaeu.com/pil-aspect/
 # 画像のサイズと指定されたサイズを基にアスペクト比を変更しないサイズを出力
 def keepAspectResize(path, size):
-    # 画像の読み込み
-    image = Image.open(path)
-    # サイズを幅と高さにアンパック
-    width, height = size
-    # 矩形の幅と画像の幅の比率を計算
-    x_ratio = width / image.width
-    # 矩形の高さと画像の高さの比率を計算
-    y_ratio = height / image.height
+    image = Image.open(path) # 画像の読み込み
+    width, height = size # サイズを幅と高さにアンパック
+    x_ratio = width / image.width # 矩形の幅と画像の幅の比率を計算
+    y_ratio = height / image.height # 矩形の高さと画像の高さの比率を計算
+
     # 画像の幅と高さ両方に小さい方の比率を掛けてリサイズ後のサイズを計算
     if x_ratio < y_ratio:
         resize_size = (width, round(image.height * x_ratio))
