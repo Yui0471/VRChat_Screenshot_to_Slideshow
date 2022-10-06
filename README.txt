@@ -80,7 +80,7 @@ MIT Licenseです。
 -Python 3.8.2
 -PyInstaller 4.9
 -OpenCV 4.5.2.54
--Pillow 22.2.2
+-Pillow 9.2.0
 -tqdm 4.64.1
 -Visual Studio Code 1.71.2
 -VRChat Build 1244
