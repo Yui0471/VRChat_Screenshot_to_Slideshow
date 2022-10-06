@@ -411,12 +411,11 @@ if __name__ == "__main__":
                     print("処理を開始します")
 
                     file_list = png_path_get(file_path)
+                    pprint.pprint(file_list)
 
                     if len(file_list) >= 4720:
                         warning("[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります")
 
-                    file_list = png_path_get(file_path)
-                    pprint.pprint(file_list)
                     path_birth = birthtime_get(file_list)
                     pprint.pprint(path_birth)
                     sorted_list = birthtime_sorted(path_birth)
