@@ -32,6 +32,7 @@ handle = kernel32.GetStdHandle(-11)
 kernel32.SetConsoleMode(handle, MODE)
 
 RED = "\033[31m"
+YELLOW = "\033[33m"
 END = "\033[0m"
 
 
@@ -225,7 +226,7 @@ if __name__ == "__main__":
                 file_list = png_path_get(file_path)
 
                 if len(file_list) >= 4720:
-                    print(RED, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
+                    print(YELLOW, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
                     yes_or_no = input("処理を続行しますか? Y/N >> ")
 
                     if "y" == yes_or_no or "Y" == yes_or_no:
@@ -269,7 +270,7 @@ if __name__ == "__main__":
                     file_list = png_path_get(file_path)
 
                     if len(file_list) >= 4720:
-                        print(RED, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
+                        print(YELLOW, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
                         yes_or_no = input("処理を続行しますか? Y/N >> ")
 
                         if "y" == yes_or_no or "Y" == yes_or_no:
@@ -306,7 +307,7 @@ if __name__ == "__main__":
                     file_list = png_path_get(file_path)
 
                     if len(file_list) >= 4720:
-                        print(RED, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
+                        print(YELLOW, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
                         yes_or_no = input("処理を続行しますか? Y/N >> ")
 
                         if "y" == yes_or_no or "Y" == yes_or_no:
@@ -319,7 +320,7 @@ if __name__ == "__main__":
                     sorted_list = birthtime_sorted(birthtime_get(file_list))
 
                     if len(sorted_list) / fps >= 139: # 総コマ数 / fps で動画の総秒数が算出できる
-                        print(RED, "[Warning!] このフレームレートだと2分20秒を上回る可能性があります!", END)
+                        print(YELLOW, "[Warning!] このフレームレートだと2分20秒を上回る可能性があります!", END)
                         yes_or_no = input("処理を続行しますか? Y/N >> ")
                         
                         if "y" == yes_or_no or "Y" == yes_or_no:
@@ -353,7 +354,7 @@ if __name__ == "__main__":
                     file_list = png_path_get(file_path)
 
                     if len(file_list) >= 4720:
-                        print(RED, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
+                        print(YELLOW, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
                         yes_or_no = input("処理を続行しますか? Y/N >> ")
 
                         if "y" == yes_or_no or "Y" == yes_or_no:
@@ -366,7 +367,7 @@ if __name__ == "__main__":
                     sorted_list = birthtime_sorted(birthtime_get(file_list))
 
                     if len(sorted_list) / fps >= 139: # 総コマ数 / fps で動画の総秒数が算出できる
-                        print(RED, "[Warning!] この秒数だと2分20秒を上回る可能性があります!", END)
+                        print(YELLOW, "[Warning!] この秒数だと2分20秒を上回る可能性があります!", END)
                         yes_or_no = input("処理を続行しますか? Y/N >> ")
 
                         if "y" == yes_or_no or "Y" == yes_or_no:
@@ -401,7 +402,7 @@ if __name__ == "__main__":
                     fps = len(file_list) / mov_len # 総枚数 / 動画の長さ で一秒あたりの表示レート(fps)の算出ができる
 
                     if len(file_list) >= 4720:
-                        print(RED, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
+                        print(YELLOW, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
                         yes_or_no = input("処理を続行しますか? Y/N >> ")
 
                         if "y" == yes_or_no or "Y" == yes_or_no:
@@ -414,7 +415,7 @@ if __name__ == "__main__":
                     sorted_list = birthtime_sorted(birthtime_get(file_list))
 
                     if len(sorted_list) / fps >= 139: # 総コマ数 / fps で動画の総秒数が算出できる
-                        print(RED, "[Warning!] 指定された秒数は2分20秒を上回ります!", END)
+                        print(YELLOW, "[Warning!] 指定された秒数は2分20秒を上回ります!", END)
                         yes_or_no = input("処理を続行しますか? Y/N >> ")
 
                         if "y" == yes_or_no or "Y" == yes_or_no:
@@ -434,7 +435,7 @@ if __name__ == "__main__":
 
             elif mode == "5":
                 print("デバッグモードが選択されました")
-                print("[Warning!] このモードは大量のログが生成されます")
+                print(YELLOW, "[Warning!] このモードは大量のログが生成されます", END)
                 file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >> ")
 
                 print("フォルダパスを取得しました: ", file_path)
@@ -446,7 +447,7 @@ if __name__ == "__main__":
                     file_list = png_path_get(file_path)
 
                     if len(file_list) >= 4720:
-                        print(RED, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
+                        print(YELLOW, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
                         yes_or_no = input("処理を続行しますか? Y/N >> ")
 
                         if "y" == yes_or_no or "Y" == yes_or_no:
