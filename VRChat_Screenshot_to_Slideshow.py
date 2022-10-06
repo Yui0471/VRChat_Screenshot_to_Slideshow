@@ -233,7 +233,20 @@ if __name__ == "__main__":
                         subprocess.call("PAUSE", shell=True)
                         sys.exit()
 
-                mp4_generation(birthtime_sorted(birthtime_get(file_list)))
+                sorted_list = birthtime_sorted(birthtime_get(file_list))
+
+                if (len(sorted_list) / 139) >= 60:
+                    print(YELLOW, "[Warning!] この画像総枚数だと60fpsを超過します!", END)
+                    yes_or_no = input("処理を続行しますか? Y/N >> ")
+
+                    if "y" == yes_or_no or "Y" == yes_or_no:
+                        pass
+                    else:
+                        print("処理を中断しました")
+                        subprocess.call("PAUSE", shell=True)
+                        sys.exit()
+
+                mp4_generation(sorted_list)
                 print("処理を正常に終了しました")
             
             else:
@@ -277,7 +290,20 @@ if __name__ == "__main__":
                             subprocess.call("PAUSE", shell=True)
                             sys.exit()
 
-                    mp4_generation(birthtime_sorted(birthtime_get(file_list)))
+                    sorted_list = birthtime_sorted(birthtime_get(file_list))
+
+                    if (len(sorted_list) / 139) >= 60:
+                        print(YELLOW, "[Warning!] この画像総枚数だと60fpsを超過します!", END)
+                        yes_or_no = input("処理を続行しますか? Y/N >> ")
+
+                        if "y" == yes_or_no or "Y" == yes_or_no:
+                            pass
+                        else:
+                            print("処理を中断しました")
+                            subprocess.call("PAUSE", shell=True)
+                            sys.exit()
+
+                    mp4_generation(sorted_list)
                     print("処理を正常に終了しました")
                 
                 else:
@@ -327,6 +353,17 @@ if __name__ == "__main__":
                             subprocess.call("PAUSE", shell=True)
                             sys.exit()
 
+                    if fps >= 60:
+                        print(YELLOW, "[Warning!] 指定されたフレームレートは60fpsを超過しています!", END)
+                        yes_or_no = input("処理を続行しますか? Y/N >> ")
+
+                        if "y" == yes_or_no or "Y" == yes_or_no:
+                            pass
+                        else:
+                            print("処理を中断しました")
+                            subprocess.call("PAUSE", shell=True)
+                            sys.exit()
+
                     mp4_generation(sorted_list, fps)
                     print("処理を正常に終了しました")
                 
@@ -362,6 +399,17 @@ if __name__ == "__main__":
                             sys.exit()
 
                     sorted_list = birthtime_sorted(birthtime_get(file_list))
+
+                    if fps >= 60:
+                        print(YELLOW, "[Warning!] 指定された秒数だと60fpsを超過します!", END)
+                        yes_or_no = input("処理を続行しますか? Y/N >> ")
+
+                        if "y" == yes_or_no or "Y" == yes_or_no:
+                            pass
+                        else:
+                            print("処理を中断しました")
+                            subprocess.call("PAUSE", shell=True)
+                            sys.exit()
 
                     if len(sorted_list) / fps >= 139: # 総コマ数 / fps で動画の総秒数が算出できる
                         print(YELLOW, "[Warning!] この秒数だと2分20秒を上回る可能性があります!", END)
@@ -411,6 +459,17 @@ if __name__ == "__main__":
 
                     sorted_list = birthtime_sorted(birthtime_get(file_list))
 
+                    if fps >= 60:
+                        print(YELLOW, "[Warning!] 指定された秒数だと60fpsを超過します!", END)
+                        yes_or_no = input("処理を続行しますか? Y/N >> ")
+
+                        if "y" == yes_or_no or "Y" == yes_or_no:
+                            pass
+                        else:
+                            print("処理を中断しました")
+                            subprocess.call("PAUSE", shell=True)
+                            sys.exit()
+
                     if len(sorted_list) / fps >= 139: # 総コマ数 / fps で動画の総秒数が算出できる
                         print(YELLOW, "[Warning!] 指定された秒数は2分20秒を上回ります!", END)
                         yes_or_no = input("処理を続行しますか? Y/N >> ")
@@ -459,6 +518,18 @@ if __name__ == "__main__":
                     path_birth = birthtime_get(file_list)
                     pprint.pprint(path_birth)
                     sorted_list = birthtime_sorted(path_birth)
+
+                    if (len(sorted_list) / 139) >= 60:
+                        print(YELLOW, "[Warning!] この画像総枚数だと60fpsを超過します!", END)
+                        yes_or_no = input("処理を続行しますか? Y/N >> ")
+
+                        if "y" == yes_or_no or "Y" == yes_or_no:
+                            pass
+                        else:
+                            print("処理を中断しました")
+                            subprocess.call("PAUSE", shell=True)
+                            sys.exit()
+
                     for tuple in sorted_list:
                         print(tuple)
                     mp4_generation(sorted_list)
