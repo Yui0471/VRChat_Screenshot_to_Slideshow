@@ -250,7 +250,8 @@ if __name__ == "__main__":
             1 : 通常動作モード
             2 : フレームレート指定モード
             3 : 写真表示秒数指定モード
-            4 : デバッグモード
+            4 : 動画秒数指定モード
+            5 : デバッグモード
             """)
 
             mode = input("起動したいモードの数字を入力してください : ")
@@ -294,7 +295,7 @@ if __name__ == "__main__":
                 print("フレームレート指定モードが選択されました")
                 print("このモードは画像一枚当たりの表示フレームを指定することができます")
                 file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >> ")
-                fps = float(input("画像一枚当たりのフレームレートを入力してください >> "))
+                fps = float(input("画像一枚当たりのフレームレートを入力してください(単位:fps) >> "))
 
                 print("フォルダパスを取得しました: ", file_path)
 
@@ -340,7 +341,7 @@ if __name__ == "__main__":
                 print("写真表示秒数指定モードが選択されました")
                 print("このモードは画像一枚当たりの表示を指定することができます")
                 file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >> ")
-                seconds = float(input("画像一枚当たりの秒数を入力してください >> "))
+                seconds = float(input("画像一枚当たりの秒数を入力してください(単位:秒) >> "))
                 fps = 1 / seconds # 1 / 秒数でfpsが算出できる
 
                 print("フォルダパスを取得しました: ", file_path)
@@ -384,6 +385,54 @@ if __name__ == "__main__":
 
 
             elif mode == "4":
+                print("動画秒数指定モードが選択されました")
+                print("このモードは書き出される動画の秒数を指定することができます")
+                file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >> ")
+                mov_len = float(input("書き出す動画の長さを指定してください(単位:秒) >> "))
+
+                print("フォルダパスを取得しました: ", file_path)
+
+                # ディレクトリかどうか判定
+                if os.path.isdir(file_path):
+                    print("処理を開始します")
+
+                    file_list = png_path_get(file_path)
+
+                    fps = len(file_list) / mov_len # 総枚数 / 動画の長さ で一秒あたりの表示レート(fps)の算出ができる
+
+                    if len(file_list) >= 4720:
+                        print(RED, "[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります", END)
+                        yes_or_no = input("処理を続行しますか? Y/N >> ")
+
+                        if "y" == yes_or_no or "Y" == yes_or_no:
+                            pass
+                        else:
+                            print("処理を中断しました")
+                            subprocess.call("PAUSE", shell=True)
+                            sys.exit()
+
+                    sorted_list = birthtime_sorted(birthtime_get(file_list))
+
+                    if len(sorted_list) / fps >= 139: # 総コマ数 / fps で動画の総秒数が算出できる
+                        print(RED, "[Warning!] 指定された秒数は2分20秒を上回ります!", END)
+                        yes_or_no = input("処理を続行しますか? Y/N >> ")
+
+                        if "y" == yes_or_no or "Y" == yes_or_no:
+                            pass
+                        else:
+                            print("処理を中断しました")
+                            subprocess.call("PAUSE", shell=True)
+                            sys.exit()
+
+                    mp4_generation(sorted_list, fps)
+                    print("処理を正常に終了しました")
+                
+                else:
+                    print(RED, "[Error!] フォルダ以外が選択されました！ 処理が続行できません", END)
+                    print("ドラッグアンドドロップで使用可能なのは[フォルダ]のみです")
+
+
+            elif mode == "5":
                 print("デバッグモードが選択されました")
                 print("[Warning!] このモードは大量のログが生成されます")
                 file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >> ")
