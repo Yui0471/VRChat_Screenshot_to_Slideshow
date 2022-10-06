@@ -187,7 +187,7 @@ def mp4_generation(sorted_list, fps=None):
     print("出力サイズ :", size[0], "x", size[1])
     print("出力形式 :", "H.264")
     print("書き出しファイル名 :", export_file)
-    print("ファイルはカレントディレクトリに生成されます")
+    print("ファイルはこのツールと同じ場所に生成されます")
     print("データの書き出しを開始します...")
 
     for path in tqdm.tqdm(sorted_list):
@@ -267,7 +267,7 @@ if __name__ == "__main__":
 
             if mode == "1":
                 print("通常動作モードが選択されました")
-                file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >> ")
+                file_path = input("処理したいフォルダをドラッグアンドドロップしてEnterを押してください >> ")
 
                 print("フォルダパスを取得しました: ", file_path)
 
@@ -300,7 +300,7 @@ if __name__ == "__main__":
             elif mode == "2":
                 print("フレームレート指定モードが選択されました")
                 print("このモードは画像一枚当たりの表示フレームを指定することができます")
-                file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >> ")
+                file_path = input("処理したいフォルダをドラッグアンドドロップしてEnterを押してください >> ")
                 fps = float(input("画像一枚当たりのフレームレートを入力してください(単位:fps) >> "))
 
                 print("フォルダパスを取得しました: ", file_path)
@@ -333,7 +333,7 @@ if __name__ == "__main__":
             elif mode == "3":
                 print("写真表示秒数指定モードが選択されました")
                 print("このモードは画像一枚当たりの表示を指定することができます")
-                file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >> ")
+                file_path = input("処理したいフォルダをドラッグアンドドロップしてEnterを押してください >> ")
                 seconds = float(input("画像一枚当たりの秒数を入力してください(単位:秒) >> "))
                 fps = 1 / seconds # 1 / 秒数でfpsが算出できる
 
@@ -367,7 +367,7 @@ if __name__ == "__main__":
             elif mode == "4":
                 print("動画秒数指定モードが選択されました")
                 print("このモードは書き出される動画の秒数を指定することができます")
-                file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >> ")
+                file_path = input("処理したいフォルダをドラッグアンドドロップしてEnterを押してください >> ")
                 mov_len = float(input("書き出す動画の長さを指定してください(単位:秒) >> "))
 
                 print("フォルダパスを取得しました: ", file_path)
@@ -402,7 +402,7 @@ if __name__ == "__main__":
             elif mode == "5":
                 print("デバッグモードが選択されました")
                 print("[Warning!] このモードは大量のログが生成されます")
-                file_path = input("処理したいディレクトリをドラッグアンドドロップしてEnterを押してください >> ")
+                file_path = input("処理したいフォルダをドラッグアンドドロップしてEnterを押してください >> ")
 
                 print("フォルダパスを取得しました: ", file_path)
 
