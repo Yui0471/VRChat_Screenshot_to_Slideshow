@@ -183,6 +183,7 @@ def mp4_generation(sorted_list, fps=None):
 
     print("画像一枚当たりのフレームレート :", flame_rate)
     print("画像一枚当たりの秒数 :", 1 / flame_rate) # 1 / fpsでフレーム当たりの秒数が求められる(逆数)
+    print("書き出される動画の秒数 :", len(sorted_list) * (1 / flame_rate))
     print("出力サイズ :", size[0], "x", size[1])
     print("出力形式 :", "H.264")
     print("書き出しファイル名 :", export_file)
