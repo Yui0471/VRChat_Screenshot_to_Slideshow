@@ -187,7 +187,7 @@ def mp4_generation(sorted_list, fps=None):
     print("出力サイズ :", size[0], "x", size[1])
     print("出力形式 :", "H.264")
     print("書き出しファイル名 :", export_file)
-    print("ファイルはこのツールと同じ場所に生成されます")
+    print("ファイルはドロップした画像フォルダと同じ場所か、このツールと同じ場所に生成されます")
     print("データの書き出しを開始します...")
 
     for path in tqdm.tqdm(sorted_list):
