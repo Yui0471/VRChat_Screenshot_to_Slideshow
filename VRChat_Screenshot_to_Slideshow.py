@@ -49,6 +49,13 @@ def png_path_get(file_path):
     for path in files:
         file_list.append(path)
 
+    if not file_list:
+        print(RED, "[Error!] 画像データを取得できませんでした!", END)
+        print("選択したフォルダ内にpngデータが含まれているか確認してください")
+        subprocess.call("PAUSE", shell=True)
+        sys.exit()
+
+
     print("画像データを", len(file_list), "件取得しました")
 
     return file_list
