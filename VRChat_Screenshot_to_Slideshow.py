@@ -11,10 +11,16 @@ import ctypes
 import subprocess
 import pprint
 import numpy as np
+import tkinter
+from tkinter import filedialog
+
+# tkinter使用時に勝手に開く親ウインドウを非表示
+root = tkinter.Tk()
+root.withdraw()
 
 credit = """
 【 VRChat Screenshot to Slideshow 】
-    Version 1.0.0
+    Version 1.1.0
     VRChatのスクリーンショットからスライドショーを生成するツール
 
             製作 : 風庭ゆい
@@ -138,6 +144,10 @@ def resource_path(relative_path):
         return os.path.join(sys._MEIPASS, relative_path)
     return os.path.join(os.path.abspath("."), relative_path)
 
+# folderダイアログを開く
+def get_filepath():
+    print("処理したいフォルダを選択してください")
+    return filedialog.askdirectory(initialdir=os.getcwd())
 
 # https://qiita.com/SKYS/items/cbde3775e2143cad7455
 # OpenCV, imreadは日本語パスを使用すると文字化けが発生し参照できなくなる
@@ -167,7 +177,7 @@ def warning(message):
 
 # mp4書き出し
 def mp4_generation(sorted_list, fps=None):
-    print("本スクリプトはOpenCV及びOpenH264を使用してファイルを生成します :", "\n")
+    print("本スクリプトはOpenH264を使用してファイルを生成します :", "\n")
 
     size = (1920, 1080) # サイズ指定
     fourcc = cv2.VideoWriter_fourcc("H", "2", "6", "4") # フォーマット指定(H.264)
@@ -210,6 +220,7 @@ def mp4_generation(sorted_list, fps=None):
     save.release()
 
     print("データの書き出しを完了しました")
+    subprocess.Popen(["explorer", os.getcwd()], shell=True)
 
 if __name__ == "__main__":
     try:
@@ -267,7 +278,8 @@ if __name__ == "__main__":
 
             if mode == "1":
                 print("通常動作モードが選択されました")
-                file_path = input("処理したいフォルダをドラッグアンドドロップしてEnterを押してください >> ")
+
+                file_path = get_filepath()
 
                 print("フォルダパスを取得しました: ", file_path)
 
@@ -300,7 +312,7 @@ if __name__ == "__main__":
             elif mode == "2":
                 print("フレームレート指定モードが選択されました")
                 print("このモードは画像一枚当たりの表示フレームを指定することができます")
-                file_path = input("処理したいフォルダをドラッグアンドドロップしてEnterを押してください >> ")
+                file_path = get_filepath()
                 fps = float(input("画像一枚当たりのフレームレートを入力してください(単位:fps) >> "))
 
                 print("フォルダパスを取得しました: ", file_path)
@@ -333,7 +345,7 @@ if __name__ == "__main__":
             elif mode == "3":
                 print("写真表示秒数指定モードが選択されました")
                 print("このモードは画像一枚当たりの表示を指定することができます")
-                file_path = input("処理したいフォルダをドラッグアンドドロップしてEnterを押してください >> ")
+                file_path = get_filepath()
                 seconds = float(input("画像一枚当たりの秒数を入力してください(単位:秒) >> "))
                 fps = 1 / seconds # 1 / 秒数でfpsが算出できる
 
@@ -367,7 +379,7 @@ if __name__ == "__main__":
             elif mode == "4":
                 print("動画秒数指定モードが選択されました")
                 print("このモードは書き出される動画の秒数を指定することができます")
-                file_path = input("処理したいフォルダをドラッグアンドドロップしてEnterを押してください >> ")
+                file_path = get_filepath()
                 mov_len = float(input("書き出す動画の長さを指定してください(単位:秒) >> "))
 
                 print("フォルダパスを取得しました: ", file_path)
@@ -402,7 +414,7 @@ if __name__ == "__main__":
             elif mode == "5":
                 print("デバッグモードが選択されました")
                 print("[Warning!] このモードは大量のログが生成されます")
-                file_path = input("処理したいフォルダをドラッグアンドドロップしてEnterを押してください >> ")
+                file_path = get_filepath()
 
                 print("フォルダパスを取得しました: ", file_path)
 
