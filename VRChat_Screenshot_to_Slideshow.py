@@ -52,8 +52,7 @@ def png_path_get(file_path):
     if not file_list:
         print(RED, "[Error!] 画像データを取得できませんでした!", END)
         print("選択したフォルダ内にpngデータが含まれているか確認してください")
-        subprocess.call("PAUSE", shell=True)
-        sys.exit()
+        close()
 
 
     print("画像データを", len(file_list), "件取得しました")
@@ -178,8 +177,7 @@ def warning(message):
         return
     else:
         print("処理を中断しました")
-        subprocess.call("PAUSE", shell=True)
-        sys.exit()
+        close()
 
 
 # mp4書き出し
@@ -229,234 +227,236 @@ def mp4_generation(sorted_list, fps=None):
     print("データの書き出しを完了しました")
     subprocess.Popen(["explorer", os.getcwd()], shell=True)
 
+
+def close():
+    input("終了するにはいずれかのキーを押してください……")
+    sys.exit()
+
+
+# 通常動作モード(ドラッグアンドドロップで起動)
+def mode_normal(path):
+    print("通常動作モードが選択されました")
+
+    if path:
+        file_path = get_filepath()
+    else:
+        file_path = path
+
+    print("フォルダパスを取得しました: ", file_path)
+
+    # ディレクトリかどうか判定
+    if os.path.isdir(file_path):
+        print("処理を開始します")
+
+        file_list = png_path_get(file_path)
+
+        if len(file_list) >= 4720:
+            warning("[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります")
+
+        sorted_list = birthtime_sorted(birthtime_get(file_list))
+
+        if (len(sorted_list) / 139) >= 60:
+            warning("[Warning!] この画像総枚数だと60fpsを超過します!")
+
+        mp4_generation(sorted_list)
+        print("処理を正常に終了しました")
+    
+    else:
+        print(RED, "[Error!] フォルダ以外が選択されました！ 処理が続行できません", END)
+        print("ドラッグアンドドロップで使用可能なのは[フォルダ]のみです")
+
+
+def mode_framelate():
+    print("フレームレート指定モードが選択されました")
+    print("このモードは画像一枚当たりの表示フレームを指定することができます")
+    file_path = get_filepath()
+    fps = float(input("画像一枚当たりのフレームレートを入力してください(単位:fps) >> "))
+
+    print("フォルダパスを取得しました: ", file_path)
+
+    # ディレクトリかどうか判定
+    if os.path.isdir(file_path):
+        print("処理を開始します")
+
+        file_list = png_path_get(file_path)
+
+        if len(file_list) >= 4720:
+            warning("[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります")
+
+        sorted_list = birthtime_sorted(birthtime_get(file_list))
+
+        if len(sorted_list) / fps >= 139: # 総コマ数 / fps で動画の総秒数が算出できる
+            warning("[Warning!] このフレームレートだと2分20秒を上回る可能性があります!")
+
+        if fps >= 60:
+            warning("[Warning!] 指定されたフレームレートは60fpsを超過しています!")
+
+        mp4_generation(sorted_list, fps)
+        print("処理を正常に終了しました")
+    
+    else:
+        print(RED, "[Error!] フォルダ以外が選択されました！ 処理が続行できません", END)
+        print("ドラッグアンドドロップで使用可能なのは[フォルダ]のみです")
+
+
+def mode_second_photo():
+    print("写真表示秒数指定モードが選択されました")
+    print("このモードは画像一枚当たりの表示を指定することができます")
+    file_path = get_filepath()
+    seconds = float(input("画像一枚当たりの秒数を入力してください(単位:秒) >> "))
+    fps = 1 / seconds # 1 / 秒数でfpsが算出できる
+
+    print("フォルダパスを取得しました: ", file_path)
+
+    # ディレクトリかどうか判定
+    if os.path.isdir(file_path):
+        print("処理を開始します")
+
+        file_list = png_path_get(file_path)
+
+        if len(file_list) >= 4720:
+            warning("[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります")
+
+        sorted_list = birthtime_sorted(birthtime_get(file_list))
+
+        if fps >= 60:
+            warning("[Warning!] 指定された秒数だと60fpsを超過します!")
+
+        if len(sorted_list) / fps >= 139: # 総コマ数 / fps で動画の総秒数が算出できる
+            warning("[Warning!] この秒数だと2分20秒を上回る可能性があります!")
+
+        mp4_generation(sorted_list, fps)
+        print("処理を正常に終了しました")
+    
+    else:
+        print(RED, "[Error!] フォルダ以外が選択されました！ 処理が続行できません", END)
+        print("ドラッグアンドドロップで使用可能なのは[フォルダ]のみです")
+
+
+def mode_second_movie():
+    print("動画秒数指定モードが選択されました")
+    print("このモードは書き出される動画の秒数を指定することができます")
+    file_path = get_filepath()
+    mov_len = float(input("書き出す動画の長さを指定してください(単位:秒) >> "))
+
+    print("フォルダパスを取得しました: ", file_path)
+
+    # ディレクトリかどうか判定
+    if os.path.isdir(file_path):
+        print("処理を開始します")
+
+        file_list = png_path_get(file_path)
+
+        fps = len(file_list) / mov_len # 総枚数 / 動画の長さ で一秒あたりの表示レート(fps)の算出ができる
+
+        if len(file_list) >= 4720:
+            warning("[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります")
+
+        sorted_list = birthtime_sorted(birthtime_get(file_list))
+
+        if fps >= 60:
+            warning("[Warning!] 指定された秒数だと60fpsを超過します!")
+
+        if len(sorted_list) / fps >= 139: # 総コマ数 / fps で動画の総秒数が算出できる
+            warning("[Warning!] 指定された秒数は2分20秒を上回ります!")
+
+        mp4_generation(sorted_list, fps)
+        print("処理を正常に終了しました")
+    
+    else:
+        print(RED, "[Error!] フォルダ以外が選択されました！ 処理が続行できません", END)
+        print("ドラッグアンドドロップで使用可能なのは[フォルダ]のみです")
+
+
+def mode_debug():
+    print("デバッグモードが選択されました")
+    print("[Warning!] このモードは大量のログが生成されます")
+    file_path = get_filepath()
+
+    print("フォルダパスを取得しました: ", file_path)
+
+    # ディレクトリかどうか判定
+    if os.path.isdir(file_path):
+        print("処理を開始します")
+
+        file_list = png_path_get(file_path)
+        pprint.pprint(file_list)
+
+        if len(file_list) >= 4720:
+            warning("[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります")
+
+        path_birth = birthtime_get(file_list)
+        pprint.pprint(path_birth)
+        sorted_list = birthtime_sorted(path_birth)
+
+        if (len(sorted_list) / 139) >= 60:
+            warning("[Warning!] この画像総枚数だと60fpsを超過します!")
+
+        for tuple in sorted_list:
+            print(tuple)
+        mp4_generation(sorted_list)
+
+        print("処理を正常に終了しました")
+    
+    else:
+        print(RED, "[Error!] フォルダ以外が選択されました！ 処理が続行できません", END)
+        print("ドラッグアンドドロップで使用可能なのは[フォルダ]のみです")
+
+
+def main():
+
+    print(credit)
+
+    # データ処理用ライブラリの存在確認
+    #if not os.path.isfile(".\\openh264-1.8.0-win64.dll"):
+    if not os.path.isfile(resource_path("openh264-1.8.0-win64.dll")):
+        print(RED, "[Error!] OpenH264ファイルが見つかりません!", END)
+        print("このスクリプトを使用するにはOpenH264 ver1.8.0が必要です")
+        close()
+
+    # 起動オプションがあったら(ドラッグアンドドロップ時のファイルパス)
+    if len(sys.argv) > 1:
+        mode_normal(sys.argv[1])
+
+    # 特殊操作モード(ダブルクリックで起動)
+    else:
+        print("特殊操作モードが選択されました")
+
+        print("""
+        1 : 通常動作モード
+        2 : フレームレート指定モード
+        3 : 写真表示秒数指定モード
+        4 : 動画秒数指定モード
+        5 : デバッグモード
+        """)
+
+        mode = input("起動したいモードの数字を入力してください : ")
+
+        if mode == "1":
+            mode_normal(True)
+
+        elif mode == "2":
+            mode_framelate()
+
+        elif mode == "3":
+            mode_second_photo()
+
+        elif mode == "4":
+            mode_second_movie()
+
+        elif mode == "5":
+            mode_debug()
+
+        else:
+            print(RED, "[Error!] 数字以外が入力されました! 処理を続行できません", END)
+
+    return
+
+
 if __name__ == "__main__":
     try:
-
-        print(credit)
-
-        #if not os.path.isfile(".\\openh264-1.8.0-win64.dll"):
-        if not os.path.isfile(resource_path("openh264-1.8.0-win64.dll")):
-            print(RED, "[Error!] OpenH264ファイルが見つかりません!", END)
-            print("このスクリプトを使用するにはOpenH264 ver1.8.0が必要です")
-            subprocess.call("PAUSE", shell=True)
-            sys.exit()
-
-        # 通常動作モード(ドラッグアンドドロップで起動)
-        if not len(sys.argv) <= 1:
-            print("通常動作モードが選択されました")
-
-            file_path = sys.argv[1]
-            print("フォルダパスを取得しました: ", file_path)
-
-            # ディレクトリかどうか判定
-            if os.path.isdir(file_path):
-                print("処理を開始します")
-
-                file_list = png_path_get(file_path)
-
-                if len(file_list) >= 4720:
-                    warning("[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります")
-
-                sorted_list = birthtime_sorted(birthtime_get(file_list))
-
-                if (len(sorted_list) / 139) >= 60:
-                    warning("[Warning!] この画像総枚数だと60fpsを超過します!")
-
-                mp4_generation(sorted_list)
-                print("処理を正常に終了しました")
-            
-            else:
-                print(RED, "[Error!] フォルダ以外が選択されました！ 処理が続行できません", END)
-                print("ドラッグアンドドロップで使用可能なのは[フォルダ]のみです")
-
-        # 特殊操作モード(ダブルクリックで起動)
-        else:
-            print("特殊操作モードが選択されました")
-
-            print("""
-            1 : 通常動作モード
-            2 : フレームレート指定モード
-            3 : 写真表示秒数指定モード
-            4 : 動画秒数指定モード
-            5 : デバッグモード
-            """)
-
-            mode = input("起動したいモードの数字を入力してください : ")
-
-            if mode == "1":
-                print("通常動作モードが選択されました")
-
-                file_path = get_filepath()
-
-                print("フォルダパスを取得しました: ", file_path)
-
-                # ディレクトリかどうか判定
-                if os.path.isdir(file_path):
-                    print("処理を開始します")
-
-                    file_list = png_path_get(file_path)
-
-                    if len(file_list) >= 4720:
-                        warning("[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります")
-
-                    sorted_list = birthtime_sorted(birthtime_get(file_list))
-
-                    if (len(sorted_list) / 139) >= 60:
-                        warning("[Warning!] この画像総枚数だと60fpsを超過します!")
-
-                    mp4_generation(sorted_list)
-                    print("処理を正常に終了しました")
-                
-                else:
-                    print(RED, "[Error!] フォルダ以外が選択されました！ 処理が続行できません", END)
-                    print("ドラッグアンドドロップで使用可能なのは[フォルダ]のみです")
-
-
-            #elif mode == "2":
-            #    print("写真選択モードが選択されました")
-
-
-            elif mode == "2":
-                print("フレームレート指定モードが選択されました")
-                print("このモードは画像一枚当たりの表示フレームを指定することができます")
-                file_path = get_filepath()
-                fps = float(input("画像一枚当たりのフレームレートを入力してください(単位:fps) >> "))
-
-                print("フォルダパスを取得しました: ", file_path)
-
-                # ディレクトリかどうか判定
-                if os.path.isdir(file_path):
-                    print("処理を開始します")
-
-                    file_list = png_path_get(file_path)
-
-                    if len(file_list) >= 4720:
-                        warning("[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります")
-
-                    sorted_list = birthtime_sorted(birthtime_get(file_list))
-
-                    if len(sorted_list) / fps >= 139: # 総コマ数 / fps で動画の総秒数が算出できる
-                        warning("[Warning!] このフレームレートだと2分20秒を上回る可能性があります!")
-
-                    if fps >= 60:
-                        warning("[Warning!] 指定されたフレームレートは60fpsを超過しています!")
-
-                    mp4_generation(sorted_list, fps)
-                    print("処理を正常に終了しました")
-                
-                else:
-                    print(RED, "[Error!] フォルダ以外が選択されました！ 処理が続行できません", END)
-                    print("ドラッグアンドドロップで使用可能なのは[フォルダ]のみです")
-
-
-            elif mode == "3":
-                print("写真表示秒数指定モードが選択されました")
-                print("このモードは画像一枚当たりの表示を指定することができます")
-                file_path = get_filepath()
-                seconds = float(input("画像一枚当たりの秒数を入力してください(単位:秒) >> "))
-                fps = 1 / seconds # 1 / 秒数でfpsが算出できる
-
-                print("フォルダパスを取得しました: ", file_path)
-
-                # ディレクトリかどうか判定
-                if os.path.isdir(file_path):
-                    print("処理を開始します")
-
-                    file_list = png_path_get(file_path)
-
-                    if len(file_list) >= 4720:
-                        warning("[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります")
-
-                    sorted_list = birthtime_sorted(birthtime_get(file_list))
-
-                    if fps >= 60:
-                        warning("[Warning!] 指定された秒数だと60fpsを超過します!")
-
-                    if len(sorted_list) / fps >= 139: # 総コマ数 / fps で動画の総秒数が算出できる
-                        warning("[Warning!] この秒数だと2分20秒を上回る可能性があります!")
-
-                    mp4_generation(sorted_list, fps)
-                    print("処理を正常に終了しました")
-                
-                else:
-                    print(RED, "[Error!] フォルダ以外が選択されました！ 処理が続行できません", END)
-                    print("ドラッグアンドドロップで使用可能なのは[フォルダ]のみです")
-
-
-            elif mode == "4":
-                print("動画秒数指定モードが選択されました")
-                print("このモードは書き出される動画の秒数を指定することができます")
-                file_path = get_filepath()
-                mov_len = float(input("書き出す動画の長さを指定してください(単位:秒) >> "))
-
-                print("フォルダパスを取得しました: ", file_path)
-
-                # ディレクトリかどうか判定
-                if os.path.isdir(file_path):
-                    print("処理を開始します")
-
-                    file_list = png_path_get(file_path)
-
-                    fps = len(file_list) / mov_len # 総枚数 / 動画の長さ で一秒あたりの表示レート(fps)の算出ができる
-
-                    if len(file_list) >= 4720:
-                        warning("[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります")
-
-                    sorted_list = birthtime_sorted(birthtime_get(file_list))
-
-                    if fps >= 60:
-                        warning("[Warning!] 指定された秒数だと60fpsを超過します!")
-
-                    if len(sorted_list) / fps >= 139: # 総コマ数 / fps で動画の総秒数が算出できる
-                        warning("[Warning!] 指定された秒数は2分20秒を上回ります!")
-
-                    mp4_generation(sorted_list, fps)
-                    print("処理を正常に終了しました")
-                
-                else:
-                    print(RED, "[Error!] フォルダ以外が選択されました！ 処理が続行できません", END)
-                    print("ドラッグアンドドロップで使用可能なのは[フォルダ]のみです")
-
-
-            elif mode == "5":
-                print("デバッグモードが選択されました")
-                print("[Warning!] このモードは大量のログが生成されます")
-                file_path = get_filepath()
-
-                print("フォルダパスを取得しました: ", file_path)
-
-                # ディレクトリかどうか判定
-                if os.path.isdir(file_path):
-                    print("処理を開始します")
-
-                    file_list = png_path_get(file_path)
-                    pprint.pprint(file_list)
-
-                    if len(file_list) >= 4720:
-                        warning("[Warning!] 画像総枚数が規定枚数を超えています! ファイルサイズが512MBを超える可能性があります")
-
-                    path_birth = birthtime_get(file_list)
-                    pprint.pprint(path_birth)
-                    sorted_list = birthtime_sorted(path_birth)
-
-                    if (len(sorted_list) / 139) >= 60:
-                        warning("[Warning!] この画像総枚数だと60fpsを超過します!")
-
-                    for tuple in sorted_list:
-                        print(tuple)
-                    mp4_generation(sorted_list)
-
-                    print("処理を正常に終了しました")
-                
-                else:
-                    print(RED, "[Error!] フォルダ以外が選択されました！ 処理が続行できません", END)
-                    print("ドラッグアンドドロップで使用可能なのは[フォルダ]のみです")
-
-            else:
-                print(RED, "[Error!] 数字以外が入力されました! 処理を続行できません", END)
-
-        subprocess.call("PAUSE", shell=True)
-
+        main()
+        close()
 
     except Exception as e:
         print(RED, "[Error!] エラーが発生しました!", END)
@@ -464,6 +464,6 @@ if __name__ == "__main__":
         traceback.print_exc()
         print(e)
 
-        subprocess.call("PAUSE", shell=True)
+        close()
 
         
