@@ -20,7 +20,7 @@ root.withdraw()
 
 credit = """
 【 VRChat Screenshot to Slideshow 】
-    Version 1.1.0
+    Version 1.1.1
     VRChatのスクリーンショットからスライドショーを生成するツール
 
             製作 : 風庭ゆい
@@ -182,10 +182,11 @@ def warning(message):
 
 # mp4書き出し
 def mp4_generation(sorted_list, fps=None):
-    print("本スクリプトはOpenH264を使用してファイルを生成します :", "\n")
+    print("本スクリプトはOpenH264を使用してファイルを生成します :")
 
     size = (1920, 1080) # サイズ指定
-    fourcc = cv2.VideoWriter_fourcc("H", "2", "6", "4") # フォーマット指定(H.264)
+    #fourcc = cv2.VideoWriter_fourcc("H", "2", "6", "4") # フォーマット指定(H.264)
+    fourcc = cv2.VideoWriter_fourcc(*"avc1") # エラー回避, 代用
 
     if fps: # フレームレート指定モード
         flame_rate = fps
